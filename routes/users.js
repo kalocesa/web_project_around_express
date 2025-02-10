@@ -12,7 +12,7 @@ router.get("/", (req, res) => {
 });
 
 router.get("/:id", (req, res) => {
-  const user = users.find((u) => u._id === req.params.id);
+  const user = users.find((user) => user._id === req.params.id);
   if (user) {
     res.json(user);
   } else {
