@@ -1,6 +1,19 @@
 const express = require("express");
 const app = express();
 const port = 3000;
+const mongoose = require("mongoose");
+
+// Conexión a MongoDB
+mongoose
+  .connect("mongodb://localhost:27017/aroundb", {
+    useUnifiedTopology: true, // Para una conexión estable
+  })
+  .then(() => {
+    console.log("Conexión exitosa a MongoDB");
+  })
+  .catch((err) => {
+    console.error("Error al conectar a MongoDB:", err);
+  });
 
 // Importar rutas
 const usersRouter = require("./routes/users");
