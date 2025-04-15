@@ -11,17 +11,16 @@ const userSchema = new mongoose.Schema({
     type: String,
     minlength: 2,
     maxlength: 30,
-    required: true,
+    required: [true, `El nombre del usuario es requerido`],
   },
   about: {
     type: String,
     minlength: 2,
     maxlength: 30,
-    required: true,
+    required: [true, `El acerca del usuario es requerido`],
   },
   avatar: {
     type: String,
-    required: true,
     validate: {
       validator: function (v) {
         return /^https?:\/\/(www\.)?[a-zA-Z0-9._~:/?%#\[\]@!$&'()*+,;=]+#?$/.test(
@@ -68,7 +67,7 @@ const users = JSON.parse(
   fs.readFileSync(path.join(__dirname, "../data/users.json"), "utf-8")
 );
 
-router.get("/", (req, res) => {
+router.get("/users", (req, res) => {
   res.json(users);
 });
 
