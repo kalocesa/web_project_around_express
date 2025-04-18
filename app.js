@@ -31,3 +31,11 @@ app.use((req, res) => {
 app.listen(port, () => {
   console.log(`Servidor escuchando en http://localhost:${port}`);
 });
+
+app.use((req, res, next) => {
+  req.user = {
+    _id: "6801d0f2e8e47dcc76afa2cd", // pega el _id del usuario de prueba que creamos en el paso anterior
+  };
+
+  next();
+});
