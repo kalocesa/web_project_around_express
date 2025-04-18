@@ -5,9 +5,7 @@ const mongoose = require("mongoose");
 
 // Conexión a MongoDB
 mongoose
-  .connect("mongodb://localhost:27017/aroundb", {
-    useUnifiedTopology: true, // Para una conexión estable
-  })
+  .connect("mongodb://localhost:27017/aroundb")
   .then(() => {
     console.log("Conexión exitosa a MongoDB");
   })
@@ -20,6 +18,7 @@ const usersRouter = require("./routes/users");
 const cardsRouter = require("./routes/cards");
 
 // Utilizar rutas
+app.use(express.json());
 app.use("/users", usersRouter);
 app.use("/cards", cardsRouter);
 

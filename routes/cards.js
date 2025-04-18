@@ -47,23 +47,50 @@ const cardSchema = new mongoose.Schema({
 });
 
 const Card = mongoose.model("card", cardSchema);
-const card = new Card();
-let error;
-//El link es incorrecto
-card.link = "htp:/ejemplo.com";
-error = card.validateSync();
-assert.equal(
-  error.errors["link"].message,
-  `htp:/ejemplo.com de la tarjeta no es un URL valido`
-);
-//No hay link en el campo
-card.link = "";
-error = card.validateSync();
-assert.equal(error.errors["link"].message, `El URL del link es requerido`);
-//Cuando el link es valido
-card.link =
-  "https://images.unsplash.com/photo-1665064563439-7d836bf18fb4?w=1000&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8Y29haHVpbGF8ZW58MHx8MHx8fDA%3D";
-error = card.validateSync();
-assert.equal(error, null);
 
-module.exports = { Card, router };
+// Obtener todas las tarjetas
+router.get("/", async (req, res) => {
+  try {
+    const cards = await Card.find();
+    res.json(cards);
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener las tarjetas", error });
+  }
+});
+
+// Crear una tarjeta
+router.post("/", async (req, res) => {
+  try {
+    const { name, link, owner } = req.body;
+    if (!name || !link || !owner) {
+      return res.status(400).json({
+        message: "La solicitud no se puede procesar porque faltan elementos",
+      });
+    }
+    const newCard = new Card({ name, link, owner });
+    const newCardSave = await newCard.save();
+    res.status(201).json(newCardSave);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Error al crear la tarjeta", error: error.message });
+  }
+});
+
+// Eliminar una tarjeta
+router.delete("/:id", async (req, res) => {
+  try {
+    const card = await Card.deleteOne({ _id: req.params.id });
+    if (card.deletedCount === 0) {
+      return res
+        .status(404)
+        .json({ message: "Error al encontrar la tarjeta", error });
+    }
+    res.status(200).json({ message: "Tarjeta eliminada" });
+  } catch (error) {
+    res.status(500).json({ message: "Error al obtener la tarjeta", error });
+  }
+});
+
+module.exports = Card;
+module.exports = router;
