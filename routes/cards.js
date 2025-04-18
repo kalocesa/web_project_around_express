@@ -1,16 +1,13 @@
-const express = require("express");
-const path = require("path");
 const router = express.Router();
-const mongoose = require("mongoose");
-const { assert } = require("console");
+const { getAllCards, createCard, deleteCard } = require("../controllers/cards");
 
-const cards = JSON.parse(
-  fs.readFileSync(path.join(__dirname, "../data/cards.json"), "utf-8")
-);
+// ruta para obtener todas las cartas
+router.get("/", getAllCards);
 
-router.get("/", (req, res) => {
-  res.json(cards);
-});
+//ruta para crear una carta
+router.post("/", createCard);
 
-module.exports = Card;
+//ruta para eliminar una carta
+router.delete("/:id", deleteCard);
+
 module.exports = router;

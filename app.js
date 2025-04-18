@@ -1,7 +1,8 @@
+const path = require("path");
 const express = require("express");
+const mongoose = require("mongoose");
 const app = express();
 const port = 3000;
-const mongoose = require("mongoose");
 
 // Conexión a MongoDB
 mongoose
