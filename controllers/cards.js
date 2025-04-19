@@ -28,7 +28,6 @@ module.exports.getCardById = async (req, res) => {
 module.exports.createCard = async (req, res) => {
   try {
     const { name, link, owner } = req.body;
-    console.log(req.user._id);
     if (!name || !link || !owner) {
       return res.status(400).json({
         message: "La solicitud no se puede procesar porque faltan elementos",
@@ -46,10 +45,11 @@ module.exports.createCard = async (req, res) => {
 
 //Dar like a una tarjeta
 module.exports.likeCard = async (req, res) => {
+  const userId = "6801d0f2e8e47dcc76afa2cd";
   try {
     const updatedCard = await Card.findByIdAndUpdate(
       req.params.cardId,
-      { $addToSet: { likes: req.user._id } },
+      { $addToSet: { likes: userId } },
       { new: true }
     ).orFail(() => {
       const error = new Error("Tarjeta no encontrada");
@@ -58,16 +58,20 @@ module.exports.likeCard = async (req, res) => {
     });
     res.json(updatedCard);
   } catch (error) {
-    res.status(500).json({ message: "Error al dar like a la tarjeta", error });
+    res.status(500).json({
+      message: "Error al dar like a la tarjeta",
+      error: error.message,
+    });
   }
 };
 
 //Dar dislike a una tarjeta
 module.exports.dislikeCard = async (req, res) => {
+  const userId = "6801d0f2e8e47dcc76afa2cd";
   try {
     const updatedCard = await Card.findByIdAndUpdate(
       req.params.cardId,
-      { $pull: { likes: req.user._id } },
+      { $pull: { likes: userId } },
       { new: true }
     ).orFail(() => {
       const error = new Error("Tarjeta no encontrada");
@@ -76,9 +80,10 @@ module.exports.dislikeCard = async (req, res) => {
     });
     res.json(updatedCard);
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Error al quitar like de la tarjeta", error });
+    res.status(500).json({
+      message: "Error al quitar like de la tarjeta",
+      error: error.message,
+    });
   }
 };
 

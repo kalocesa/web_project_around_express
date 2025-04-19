@@ -17,9 +17,9 @@ router.post("/", createCard);
 router.delete("/:id", deleteCard);
 
 //ruta para dar like a una tarjeta
-router.put("/:id/like", likeCard);
+router.put("/:cardId/likes", likeCard);
 
 //ruta para dar dislike a una tarjeta
-router.delete("/:id", dislikeCard);
+router.delete("/:cardId/likes", dislikeCard);
 
 module.exports = router;
